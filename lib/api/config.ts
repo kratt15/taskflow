@@ -1,39 +1,42 @@
+import axios from "axios";
+
 /**
- * Configuration de l'API
- *
- * Ce fichier centralise toutes les configurations liées à l'API backend.
+ * Configuration de l'API avec Axios
  */
 
 // URL de base de l'API
-// En développement, utilisez votre URL locale (ex: http://localhost:8000)
-// En production, utilisez l'URL de votre API déployée
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3500/api/v1";
 
 // Timeout pour les requêtes (en millisecondes)
 export const API_TIMEOUT = 10000; // 10 secondes
 
-// Configuration des headers par défaut
-export const DEFAULT_HEADERS = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-};
+// Création de l'instance Axios configurée
+export const api = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: API_TIMEOUT,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
 
-/**
- * Construit l'URL complète pour un endpoint
- * @param endpoint - L'endpoint de l'API (ex: "/tasks" ou "tasks")
- * @returns L'URL complète
- */
-export function getApiUrl(endpoint: string): string {
-  // Enlève le slash initial s'il existe pour éviter les doubles slashes
-  const cleanEndpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
-  return `${API_BASE_URL}/${cleanEndpoint}`;
-}
+// Intercepteur de réponse pour simplifier la gestion des erreurs
+api.interceptors.response.use(
+  (response) => {
+    // On retourne directement la réponse
+    return response;
+  },
+  (error) => {
+    // Gestion centralisée des erreurs
+    // On peut extraire le message d'erreur de l'API si disponible
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      "Une erreur inconnue est survenue";
+    console.error("API Error:", message);
 
-/**
- * Configuration pour les requêtes fetch
- */
-export const fetchConfig = {
-  headers: DEFAULT_HEADERS,
-  // Vous pouvez ajouter d'autres options ici (credentials, mode, etc.)
-};
+    // On propage une erreur avec un message clair
+    return Promise.reject(new Error(message));
+  }
+);
