@@ -21,6 +21,26 @@ export const api = axios.create({
   },
 });
 
+// Intercepteur de requête pour injecter le token
+api.interceptors.request.use(
+  (config) => {
+    // On évite l'import circulaire en lisant directement le localStorage ou via une fonction helper simple
+    // Note: getToken() de @/lib/auth/token est sûr ici car il n'importe pas api config
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("taskflow_auth_token")
+        : null;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Intercepteur de réponse pour simplifier la gestion des erreurs
 api.interceptors.response.use(
   (response) => {
