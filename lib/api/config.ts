@@ -1,4 +1,5 @@
 import axios from "axios";
+import { formatApiError } from "@/lib/utils/errorMessages";
 
 /**
  * Configuration de l'API avec Axios
@@ -48,15 +49,11 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Gestion centralisée des erreurs
-    // On peut extraire le message d'erreur de l'API si disponible
-    const message =
-      error.response?.data?.message ||
-      error.message ||
-      "Une erreur inconnue est survenue";
+    // Gestion centralisée des erreurs avec messages en français
+    const message = formatApiError(error);
     console.error("API Error:", message);
 
-    // On propage une erreur avec un message clair
+    // On propage une erreur avec un message clair et compréhensible
     return Promise.reject(new Error(message));
   }
 );

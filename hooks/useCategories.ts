@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
 import {
   getAllCategories,
@@ -14,6 +12,7 @@ import {
   UpdateCategoryDto,
   CategoryFilterDto,
 } from "@/types/category";
+import { formatApiError } from "@/lib/utils/errorMessages";
 
 export function useCategories(filter?: CategoryFilterDto) {
   const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
@@ -27,11 +26,7 @@ export function useCategories(filter?: CategoryFilterDto) {
       const data = await getAllCategories(filter);
       setCategories(data);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des catégories"
-      );
+      setError(formatApiError(err));
     } finally {
       setIsLoading(false);
     }
@@ -102,11 +97,7 @@ export function useCategory(id: string) {
         const data = await getCategoryById(id);
         setCategory(data);
       } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement de la catégorie"
-        );
+        setError(formatApiError(err));
       } finally {
         setIsLoading(false);
       }

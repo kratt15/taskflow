@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import Input from "@/components/ui/Input";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -64,64 +65,44 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">Nom d&#39;utilisateur</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Votre pseudo"
-                className="input input-bordered w-full"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Nom d'utilisateur"
+              type="text"
+              placeholder="Votre pseudo"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
 
-            <div className="form-control w-full mt-4">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="email@exemple.com"
-                className="input input-bordered w-full"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+            <Input
+              label="Email"
+              type="email"
+              placeholder="email@exemple.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-            <div className="form-control w-full mt-4">
-              <label className="label">
-                <span className="label-text">Mot de passe</span>
-              </label>
-              <input
-                type="password"
-                placeholder="********"
-                className="input input-bordered w-full"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <Input
+              label="Mot de passe"
+              type="password"
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
-            <div className="form-control w-full mt-4">
-              <label className="label">
-                <span className="label-text">Confirmer le mot de passe</span>
-              </label>
-              <input
-                type="password"
-                placeholder="********"
-                className="input input-bordered w-full"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
+            <Input
+              label="Confirmer le mot de passe"
+              type="password"
+              placeholder="********"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
 
-            <div className="form-control mt-6">
+            <div className="form-control pt-2">
               <button
                 type="submit"
                 className="btn btn-primary"

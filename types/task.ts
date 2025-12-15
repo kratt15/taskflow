@@ -1,4 +1,4 @@
-import type { TaskLevel, TaskStatus } from '../enums/task';
+import type { TaskLevel, TaskStatus } from "../enums/task";
 
 export interface Task {
   id: string;
@@ -6,10 +6,11 @@ export interface Task {
   description: string | null;
   status: TaskStatus;
   level: TaskLevel;
+  categoryId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
-export type CreateTaskDto = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateTaskDto = Omit<Task, "id" | "createdAt" | "updatedAt">;
 
 // Type helper pour permettre explicitement undefined dans les propriétés optionnelles
 // Compatible avec exactOptionalPropertyTypes: true et Zod .partial()
@@ -18,16 +19,16 @@ type PartialWithUndefined<T> = {
 };
 
 export type UpdateTaskDto = PartialWithUndefined<
-  Omit<Task, 'id' | 'createdAt' | 'updatedAt'>
+  Omit<Task, "id" | "createdAt" | "updatedAt">
 >;
-export type TaskResponseDto = Omit<Task, ''>;
-export type PublicTaskDto = Pick<Task, 'id' | 'title'>;
+export type TaskResponseDto = Omit<Task, "">;
+export type PublicTaskDto = Pick<Task, "id" | "title">;
 export type TaskFilterDto = {
   status?: TaskStatus;
   level?: TaskLevel;
   search?: string;
-  sort?: 'createdAt' | 'updatedAt';
-  order?: 'asc' | 'desc';
+  sort?: "createdAt" | "updatedAt";
+  order?: "asc" | "desc";
   page?: number;
   limit?: number;
 };

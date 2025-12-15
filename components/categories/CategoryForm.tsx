@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { CreateCategoryDto, UpdateCategoryDto } from "@/types/category";
+import Input from "@/components/ui/Input";
 
 interface CategoryFormProps<T extends CreateCategoryDto | UpdateCategoryDto> {
   initialData?: {
@@ -42,7 +43,7 @@ export default function CategoryForm<
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
         <div className="alert alert-error">
           <svg
@@ -62,31 +63,18 @@ export default function CategoryForm<
         </div>
       )}
 
-      {/* Nom */}
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">
-            Nom de la catégorie <span className="text-error">*</span>
-          </span>
-        </label>
-        <input
-          type="text"
-          placeholder="Ex: Travail, Personnel, Urgent..."
-          className="input input-bordered"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          disabled={isLoading}
-        />
-        <label className="label">
-          <span className="label-text-alt">
-            Choisissez un nom court et descriptif
-          </span>
-        </label>
-      </div>
+      <Input
+        label="Nom de la catégorie"
+        type="text"
+        placeholder="Ex: Travail, Personnel, Urgent..."
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        disabled={isLoading}
+        helperText="Choisissez un nom court et descriptif"
+      />
 
-      {/* Boutons */}
-      <div className="flex gap-4 justify-end">
+      <div className="flex gap-4 justify-end pt-2">
         <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading && <span className="loading loading-spinner"></span>}
           {submitLabel}

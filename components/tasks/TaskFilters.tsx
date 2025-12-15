@@ -1,6 +1,8 @@
 "use client";
 
 import { TaskStatus, TaskLevel } from "@/enums/task";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
 
 interface TaskFiltersProps {
   onFilterChange: (filters: {
@@ -49,60 +51,38 @@ export default function TaskFilters({
   return (
     <div className="card bg-base-100 shadow-md p-4 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Recherche */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Rechercher</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Titre de la tâche..."
-            className="input input-bordered"
-            value={currentFilters.search || ""}
-            onChange={handleSearchChange}
-          />
-        </div>
+        <Input
+          label="Rechercher"
+          type="text"
+          placeholder="Titre de la tâche..."
+          value={currentFilters.search || ""}
+          onChange={handleSearchChange}
+        />
 
-        {/* Filtre par statut */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Statut</span>
-          </label>
-          <select
-            className="select select-bordered"
-            value={currentFilters.status || ""}
-            onChange={handleStatusChange}
-          >
-            <option value="">Tous</option>
-            <option value={TaskStatus.NOT_STARTED}>Non démarré</option>
-            <option value={TaskStatus.IN_PROGRESS}>En cours</option>
-            <option value={TaskStatus.COMPLETED}>Complété</option>
-          </select>
-        </div>
+        <Select
+          label="Statut"
+          value={currentFilters.status || ""}
+          onChange={handleStatusChange}
+        >
+          <option value="">Tous</option>
+          <option value={TaskStatus.NOT_STARTED}>Non démarré</option>
+          <option value={TaskStatus.IN_PROGRESS}>En cours</option>
+          <option value={TaskStatus.COMPLETED}>Complété</option>
+        </Select>
 
-        {/* Filtre par niveau */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Priorité</span>
-          </label>
-          <select
-            className="select select-bordered"
-            value={currentFilters.level || ""}
-            onChange={handleLevelChange}
-          >
-            <option value="">Toutes</option>
-            <option value={TaskLevel.LOW}>Faible</option>
-            <option value={TaskLevel.MEDIUM}>Moyen</option>
-            <option value={TaskLevel.HIGH}>Élevé</option>
-          </select>
-        </div>
+        <Select
+          label="Priorité"
+          value={currentFilters.level || ""}
+          onChange={handleLevelChange}
+        >
+          <option value="">Toutes</option>
+          <option value={TaskLevel.LOW}>Faible</option>
+          <option value={TaskLevel.MEDIUM}>Moyen</option>
+          <option value={TaskLevel.HIGH}>Élevé</option>
+        </Select>
 
-        {/* Bouton reset */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text opacity-0">Action</span>
-          </label>
-          <button onClick={handleReset} className="btn btn-outline">
+        <div className="flex items-end">
+          <button onClick={handleReset} className="btn btn-outline w-full">
             Réinitialiser
           </button>
         </div>

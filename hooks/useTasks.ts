@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
 import {
   getAllTasks,
@@ -14,6 +12,7 @@ import {
   UpdateTaskDto,
   TaskFilterDto,
 } from "@/types/task";
+import { formatApiError } from "@/lib/utils/errorMessages";
 
 export function useTasks(filter?: TaskFilterDto) {
   const [tasks, setTasks] = useState<TaskResponseDto[]>([]);
@@ -27,11 +26,7 @@ export function useTasks(filter?: TaskFilterDto) {
       const data = await getAllTasks(filter);
       setTasks(data);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des tâches"
-      );
+      setError(formatApiError(err));
     } finally {
       setIsLoading(false);
     }
@@ -101,11 +96,7 @@ export function useTask(id: string) {
         const data = await getTaskById(id);
         setTask(data);
       } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement de la tâche"
-        );
+        setError(formatApiError(err));
       } finally {
         setIsLoading(false);
       }
