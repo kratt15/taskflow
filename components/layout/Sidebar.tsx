@@ -3,6 +3,8 @@
 import { ReactElement } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTasks } from "@/hooks/useTasks";
+import { TaskStatus } from "@/enums/task";
 
 interface NavItem {
   name: string;
@@ -75,6 +77,13 @@ const navItems: NavItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { tasks, isLoading } = useTasks();
+
+  const stats = {
+    total: tasks.length,
+    inProgress: tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length,
+    completed: tasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
+  };
 
   return (
     <aside className="w-64 bg-base-200 min-h-screen p-4">
@@ -128,15 +137,21 @@ export default function Sidebar() {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="opacity-70">Total</span>
-            <span className="font-semibold">-</span>
+            <span className="font-semibold">
+              {isLoading ? "..." : stats.total}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="opacity-70">En cours</span>
-            <span className="font-semibold text-warning">-</span>
+            <span className="font-semibold text-warning">
+              {isLoading ? "..." : stats.inProgress}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="opacity-70">Complétées</span>
-            <span className="font-semibold text-success">-</span>
+            <span className="font-semibold text-success">
+              {isLoading ? "..." : stats.completed}
+            </span>
           </div>
         </div>
       </div>

@@ -27,6 +27,7 @@ export type TaskFilterDto = {
   status?: TaskStatus;
   level?: TaskLevel;
   search?: string;
+  categoryId?: string;
   sort?: "createdAt" | "updatedAt";
   order?: "asc" | "desc";
   page?: number;

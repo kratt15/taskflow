@@ -6,10 +6,17 @@ import CategoryCard from "@/components/categories/CategoryCard";
 import Loading from "@/components/ui/Loading";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { useCategories } from "@/hooks/useCategories";
+import { useTasks } from "@/hooks/useTasks";
 
 export default function CategoriesPage() {
   const { categories, isLoading, error, removeCategory, refetch } =
     useCategories();
+  const { tasks } = useTasks();
+
+  // Calculer le nombre de tâches par catégorie
+  const getTaskCount = (categoryId: string) => {
+    return tasks.filter((task) => task.categoryId === categoryId).length;
+  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -92,7 +99,7 @@ export default function CategoriesPage() {
                 <CategoryCard
                   key={category.id}
                   category={category}
-                  taskCount={0}
+                  taskCount={getTaskCount(category.id)}
                   onDelete={handleDelete}
                 />
               ))}

@@ -9,6 +9,8 @@ import ErrorMessage from "@/components/ui/ErrorMessage";
 import { useCategory } from "@/hooks/useCategories";
 import { useToast } from "@/hooks/useToast";
 import { deleteCategory } from "@/services/category";
+import { useTasks } from "@/hooks/useTasks";
+import TaskList from "@/components/tasks/TaskList";
 
 export default function CategoryDetailPage() {
   const params = useParams();
@@ -16,6 +18,13 @@ export default function CategoryDetailPage() {
   const toast = useToast();
   const categoryId = params.id as string;
   const { category, isLoading, error } = useCategory(categoryId);
+
+  // Récupérer toutes les tâches et filtrer côté client
+  // car le backend ne supporte pas encore le filtrage par categoryId
+  const { tasks: allTasks, isLoading: tasksLoading } = useTasks();
+  const categoryTasks = allTasks.filter(
+    (task) => task.categoryId === categoryId
+  );
 
   const handleDelete = async () => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) {
@@ -157,12 +166,14 @@ export default function CategoryDetailPage() {
 
           {/* Tâches associées */}
           <Card title="Tâches associées" className="lg:col-span-2">
-            <div className="text-center py-8 opacity-70">
-              <p>Fonctionnalité à venir</p>
-              <p className="text-sm mt-2">
-                Les tâches associées à cette catégorie seront affichées ici
-              </p>
-            </div>
+            {tasksLoading ? (
+              <Loading message="Chargement des tâches..." />
+            ) : (
+              <TaskList
+                tasks={categoryTasks}
+                emptyMessage="Aucune tâche associée à cette catégorie"
+              />
+            )}
           </Card>
         </div>
       </div>

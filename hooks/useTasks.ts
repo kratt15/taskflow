@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   getAllTasks,
   getTaskById,
@@ -19,18 +19,35 @@ export function useTasks(filter?: TaskFilterDto) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Stabiliser la référence de filter avec useMemo
+  // On décompose filter en propriétés individuelles pour éviter une boucle infinie
+  // causée par la création d'un nouvel objet filter à chaque rendu
+  const stableFilter = useMemo(
+    () => filter,
+    [
+      filter?.status,
+      filter?.level,
+      filter?.search,
+      filter?.categoryId,
+      filter?.sort,
+      filter?.order,
+      filter?.page,
+      filter?.limit,
+    ]
+  );
+
   const fetchTasks = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await getAllTasks(filter);
+      const data = await getAllTasks(stableFilter);
       setTasks(data);
     } catch (err) {
       setError(formatApiError(err));
     } finally {
       setIsLoading(false);
     }
-  }, [filter]);
+  }, [stableFilter]);
 
   useEffect(() => {
     fetchTasks();
